@@ -1,23 +1,30 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import PokeCard from './components/PokeCard';
 
 function App() {
+  const [pokemon, setPokemon] = useState([])
+
+  useEffect(() => {
+    axios
+      .get('https://pokeapi.co/api/v2/pokemon?limit=10')
+      .then((res) => {
+        console.log(res.data.results)
+        setPokemon(res.data.results)
+      })
+  },[])
+
+  const displayPokemon = pokemon.map((poke, index) => {
+    return <PokeCard name={poke.name} />
+  })
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <h1>Let's list pokemon!</h1>
+        {displayPokemon}
     </div>
   );
 }
